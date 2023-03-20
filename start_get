@@ -1,0 +1,40 @@
+import random
+
+def start(n, c):
+    #n - количество карт
+    #c - количество игроков
+    coll = colld()
+    if n * c > 40:
+        print("Карт на всех не хватит, можно раздать не более 40 карт")
+        return
+    return [n, c, coll[0], coll[1]]
+
+def get(c):
+    global coll
+    global st
+    if int(c) > st[1]:
+        print('Номер игрока больше общего количества игроков')
+        return
+    if c in st[3]:
+        print(c, *st[3][c])
+    else:
+        card = random.sample(st[2], st[1])
+        st[2] = set(st[2]) - set(card)
+        st[3][c] = card
+        print(c, *card)
+
+def colld():
+    d = {} #словарь, который хранит выданные карты участникам
+    coll = []
+    mast = ['R', 'G', 'B', 'W']
+    for i in mast:
+        for j in range(1, 11):
+            coll.append(i+str(j))
+    return coll, d
+comand = ''
+while comand != 'exit':
+    comand = input().split()
+    if comand[0] == 'start':
+        st = start(int(comand[1]), int(comand[2]))
+    if comand[0] == 'get-cards':
+        get(comand[1])
